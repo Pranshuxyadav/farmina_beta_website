@@ -148,9 +148,24 @@ color: #4BB6E8;
 <div class="container mx-auto px-4">
 <div class="flex flex-col lg:flex-row items-center min-h-[600px]">
 <div class="w-full lg:w-1/2 relative h-[400px] lg:h-[600px]">
-<img src="https://readdy.ai/api/search-image?query=Happy%20healthy%20dogs%20and%20cats%20together%20with%20premium%20pet%20food%20bowls%20in%20a%20bright%20modern%20home%20setting%2C%20natural%20lighting%2C%20high-quality%20pet%20nutrition%2C%20content%20pets%20enjoying%20their%20meal%2C%20professional%20pet%20photography%2C%20clean%20background%2C%20vibrant%20colors%2C%20detailed%20fur%20texture%2C%20premium%20pet%20food%20brand%20advertisement%20style&width=1000&height=1000&seq=1&orientation=squarish"
-alt="Happy pets with premium food"
-class="w-full h-full object-cover rounded-3xl">
+<div class="slider-container relative w-full h-full overflow-hidden rounded-3xl">
+<div class="slider-wrapper flex transition-transform duration-500">
+<img src="https://readdy.ai/api/search-image?query=Happy%20healthy%20dogs%20and%20cats%20together%20with%20premium%20pet%20food%20bowls%20in%20a%20bright%20modern%20home%20setting%2C%20natural%20lighting%2C%20high-quality%20pet%20nutrition%2C%20content%20pets%20enjoying%20their%20meal%2C%20professional%20pet%20photography%2C%20clean%20background%2C%20vibrant%20colors%2C%20detailed%20fur%20texture%2C%20premium%20pet%20food%20brand%20advertisement%20style&width=1000&height=1000&seq=1&orientation=squarish" alt="Happy pets with premium food" class="w-full h-full object-cover flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Elegant%20display%20of%20premium%20pet%20food%20products%20with%20natural%20ingredients%2C%20professional%20product%20photography%2C%20clean%20modern%20setting%2C%20high-end%20pet%20nutrition%2C%20luxury%20pet%20food%20brand%20style&width=1000&height=1000&seq=9&orientation=squarish" alt="Premium pet food products" class="w-full h-full object-cover flex-shrink-0">
+<img src="https://readdy.ai/api/search-image?query=Veterinarian%20examining%20healthy%20dog%20in%20modern%20clinic%2C%20professional%20healthcare%20setting%2C%20bright%20lighting%2C%20caring%20interaction%2C%20premium%20pet%20care%20service&width=1000&height=1000&seq=10&orientation=squarish" alt="Professional pet care" class="w-full h-full object-cover flex-shrink-0">
+</div>
+<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+<button class="w-2 h-2 rounded-full bg-white/50 slider-dot active"></button>
+<button class="w-2 h-2 rounded-full bg-white/50 slider-dot"></button>
+<button class="w-2 h-2 rounded-full bg-white/50 slider-dot"></button>
+</div>
+<button class="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white/30 hover:bg-white/50 rounded-full text-white backdrop-blur-sm transition-all" id="prevSlide">
+<i class="ri-arrow-left-s-line ri-lg"></i>
+</button>
+<button class="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white/30 hover:bg-white/50 rounded-full text-white backdrop-blur-sm transition-all" id="nextSlide">
+<i class="ri-arrow-right-s-line ri-lg"></i>
+</button>
+</div>
 </div>
 <div class="w-full lg:w-1/2 py-12 lg:py-24 lg:pl-16">
 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">Premium Nutrition for Your Beloved Pets</h1>
@@ -387,6 +402,44 @@ class="w-full h-full object-cover">
 </footer>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+// Slider functionality
+const sliderWrapper = document.querySelector('.slider-wrapper');
+const dots = document.querySelectorAll('.slider-dot');
+const prevButton = document.getElementById('prevSlide');
+const nextButton = document.getElementById('nextSlide');
+let currentSlide = 0;
+const totalSlides = dots.length;
+function updateSlider() {
+sliderWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+dots.forEach((dot, index) => {
+dot.classList.toggle('bg-white', index === currentSlide);
+dot.classList.toggle('bg-white/50', index !== currentSlide);
+});
+}
+function nextSlide() {
+currentSlide = (currentSlide + 1) % totalSlides;
+updateSlider();
+}
+function prevSlide() {
+currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+updateSlider();
+}
+prevButton.addEventListener('click', prevSlide);
+nextButton.addEventListener('click', nextSlide);
+dots.forEach((dot, index) => {
+dot.addEventListener('click', () => {
+currentSlide = index;
+updateSlider();
+});
+});
+// Auto slide every 5 seconds
+let slideInterval = setInterval(nextSlide, 5000);
+// Pause auto slide on hover
+const sliderContainer = document.querySelector('.slider-container');
+sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
+sliderContainer.addEventListener('mouseleave', () => {
+slideInterval = setInterval(nextSlide, 5000);
+});
 // Mobile menu toggle
 const menuButton = document.querySelector('button');
 const nav = document.querySelector('nav');
